@@ -24,7 +24,9 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-here')
 # OAuth configuration
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
 CLIENT_SECRETS_FILE = 'client_secrets.json'
-REDIRECT_URI = 'http://localhost:8080/callback'
+
+# Get redirect URI from environment or use localhost for development
+REDIRECT_URI = os.getenv('REDIRECT_URI', 'http://localhost:8080/callback')
 
 # Store user credentials (in production, use a database)
 user_credentials = {}
@@ -194,4 +196,6 @@ def not_found(error):
 
 def start_web_server():
     """Start the web server"""
-    app.run(host='0.0.0.0', port=8080, debug=False)
+    port = int(os.getenv('PORT', 8080))
+    debug = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=port, debug=debug)

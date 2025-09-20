@@ -64,8 +64,10 @@ class WOWDriveBot:
     async def get_auth_url(self, user_id: int) -> Optional[str]:
         """Get authentication URL for user"""
         try:
+            # Get the web server URL from environment or use localhost
+            web_url = os.getenv('WEB_URL', 'http://localhost:8080')
             async with aiohttp.ClientSession() as session:
-                url = f"http://localhost:8080/auth/{user_id}"
+                url = f"{web_url}/auth/{user_id}"
                 async with session.get(url) as response:
                     if response.status == 200:
                         data = await response.json()
